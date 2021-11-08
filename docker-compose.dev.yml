@@ -1,0 +1,56 @@
+version: "3"
+
+services:
+  app:
+    build: 
+      context: .
+      args:
+        USER_ID: 1000 # Set this to the user id of the user that runs docker-compose
+        GROUP_ID: 1000 # Set this to the group id of the user that runs docker-compose
+    networks:
+      - app
+    environment:
+      APP_URL: "https://example.com"
+      DEBUG: 0
+      DATABASE_ADAPTER: "Mysql"
+      DATABASE_HOST: "mysql"
+      DATABASE_USERNAME: "bonuz"
+      DATABASE_PASSWORD: "bonuz"
+      DATABASE_DBNAME: "bonuz"
+      MAIL_FROM_NAME: "bonuz @zeolabs"
+      MAIL_FROM_EMAIL: "example@gmail.com"
+      MAIL_SERVER: "smtp.example.com"
+      MAIL_PORT: "465"
+      MAIL_SECURITY: "ssl"
+      MAIL_USERNAME: "example@gmail.com"
+      MAIL_PASSWORD: mailpassword
+      MAIL_DISABLED: 1
+      DISCORD_DISABLED: 1
+      DISCORD_SECRET: "64aaba56c4c104594f50d3932780462929b77ceb"
+      DISCORD_WEBHOOK: "https://discord.com/api/webhooks/..."
+      SLACK_DISABLED: 1
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - 80:80
+      - 443:443
+
+  mysql:
+    depends_on:
+      - app
+    image: mysql:5.7
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - app
+    environment:
+      MYSQL_ROOT_PASSWORD: "bonuz"
+      MYSQL_USER: "bonuz"
+      MYSQL_PASSWORD: "bonuz"
+      MYSQL_DATABASE: "bonuz"
+      
+volumes:
+  db:
+
+networks:
+  app:

@@ -1,0 +1,10 @@
+{
+  "name": "ozal/ozal",
+  "require": {
+    "phalcon/devtools": "3.4.12",
+    "vlucas/phpdotenv": "^5.3"
+  },
+  "require-dev": {
+    "phalcon/ide-stubs": "3.4.3"
+  }
+}
