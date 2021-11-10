@@ -72,7 +72,7 @@ class MessageParser
     {
         $str = $this->raw;
         $res = [];
-        preg_match_all('/(@\w+)/u', $str, $res);
+        preg_match_all('/(@[\w._-]+)/u', $str, $res);
         $this->users = $res[0];
     }
 
