@@ -80,9 +80,16 @@ class DiscordBotController extends \Phalcon\Mvc\Controller
 			/**
 			 * @var Users
 			 */
-			$foundUser = Users::findFirst(["email=:email:", 'bind' => [':email' => $email]]);
+			$foundUser = Users::findFirst(["email=:email:", 'bind' => ['email' => $email]]);
+			/**
+			 * @var Users
+			 */
+			$foundDiscordUser = Users::findFirst(["discord_id=:discord_id:", 'bind' => ['discord_id' => $sender]]);
+			if ($foundDiscordUser) {
+				throw new \Exception("This discord user is already linked to a bonuz account.");
+			}
 			if (!$foundUser) {
-				throw new \Exception("There is no such user that is registered into bonuz with this $email");
+				throw new \Exception("There is no such user that is registered into bonuz with this email: $email");
 			}
 			if (!empty($foundUser->discord_id)) {
 				throw new \Exception("$email is already linked to a discord account");
