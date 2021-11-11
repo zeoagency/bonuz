@@ -61,6 +61,44 @@ class DiscordBotController extends \Phalcon\Mvc\Controller
 		}
 	}
 
+	public function linkAccountAction()
+	{
+		$request = $this->request;
+		try {
+
+			$params = json_decode($request->getRawBody(), true);
+
+			if (!$params) {
+				throw new \Exception('not a valid json');
+			}
+
+			if (!array_key_exists('sender', $params) || !array_key_exists('email', $params)) {
+				throw new \Exception('request body is not valid');
+			}
+			$sender = $params['sender']['id'];
+			$email = $params['email'];
+			/**
+			 * @var Users
+			 */
+			$foundUser = Users::findFirst(["email=:email:", 'bind' => [':email' => $email]]);
+			if (!$foundUser) {
+				throw new \Exception("There is no such user that is registered into bonuz with this $email");
+			}
+			if (!empty($foundUser->discord_id)) {
+				throw new \Exception("$email is already linked to a discord account");
+			}
+			$foundUser->discord_id = $sender;
+			$foundUser->save();
+
+			$this->response->setContent("200")->send();
+		} catch (\Exception $e) {
+
+			$this->response->setContent($e->getMessage())->setStatusCode(422)->send();
+		} finally {
+			die();
+		}
+	}
+
 	/**
 	 * Find a user from a discord request
 	 *

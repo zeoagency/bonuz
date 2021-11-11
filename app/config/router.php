@@ -52,6 +52,7 @@ $router->add('/slack', 'Slack::index');
 $router->add('/giphy', 'Giphy::index');
 /**Bots */
 $router->add('/bots/discord', 'DiscordBot::giveBonuz');
+$router->add('/bots/discord/link', 'DiscordBot::linkAccount');
 
 
 $router->handle();
