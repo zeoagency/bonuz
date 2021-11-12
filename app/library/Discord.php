@@ -31,11 +31,11 @@ class Discord extends Component
 			return true;
 
 		$rrecievers = $pm->users;
-		if ($recievers && !empty($recievers) && is_array($recievers)) {
+		if (!empty($recievers) && is_array($recievers)) {
 			$rrecievers = $recievers;
 		}
 		$users = $rrecievers;
-		if (empty($$recievers) || empty($sender)) {
+		if (empty($recievers) || empty($sender)) {
 			return true;
 		}
 		usort($users, function ($a, $b) {
