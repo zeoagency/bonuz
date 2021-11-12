@@ -24,18 +24,26 @@ class Discord extends Component
 	 * @param Users $sender
 	 * @return void
 	 */
-	public function send($url, $pm, $sender)
+	public function send($url, $pm, $sender, $recievers = null)
 	{
 
 		if ($_ENV['DISCORD_DISABLED'])
 			return true;
-		$users = $pm->users;
+
+		$rrecievers = $pm->users;
+		if ($recievers && !empty($recievers) && is_array($recievers)) {
+			$rrecievers = $recievers;
+		}
+		$users = $rrecievers;
+		if (empty($$recievers) || empty($sender)) {
+			return true;
+		}
 		usort($users, function ($a, $b) {
 			return count(EmailParser::getMentionName($b->email)) <=> count(EmailParser::getMentionName($a->email));
 		});
 		$names = [];
 		$message = $pm->message;
-		foreach ($pm->users as $user) {
+		foreach ($rrecievers as $user) {
 			array_push($names, $user->name);
 			$this->injectDiscordName($user, $message);
 		}

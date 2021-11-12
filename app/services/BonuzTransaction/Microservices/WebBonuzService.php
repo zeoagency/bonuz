@@ -9,6 +9,7 @@ use Exception;
 use Helpers\MessageParser;
 use Services\BonuzTransaction\BonuzTransactionService;
 use Services\BonuzTransaction\BonuzValidator;
+use Users;
 
 class WebBonuzService extends BonuzTransactionService
 {
@@ -76,6 +77,7 @@ class WebBonuzService extends BonuzTransactionService
                 $bonuz->comment = $message;
                 $bonuz->top_id = $topId;
                 $bonuz->quantity = $pm->point;
+                $recieverIds = [];
                 if ($bonuz->save()) {
                     $newBonuzId = $bonuz->id;
                     $this->createdBonuzId = $newBonuzId;
@@ -83,11 +85,13 @@ class WebBonuzService extends BonuzTransactionService
                     {
                         $bd = new BonuzDetails();
                         if ($bd) {
+
                             $bd->bonuz_id = $newBonuzId;
                             $bd->to = $this->isComment() ? $bonuzDetail->to : $bonuzDetail->id;
                             $bd->quantity = $pm->point;
                             $bd->comment = $this->isComment() ? 1 : 0;
                             $bd->save();
+                            array_push($recieverIds, $bd->to);
                         } else {
                             $this->throwDatabaseError($bd);
                         }
@@ -105,8 +109,13 @@ class WebBonuzService extends BonuzTransactionService
                         }
                     }
 
-
-                    $this->discord->send($_ENV['APP_URL'] . '/bonuz/' . ($this->isComment() ? $topId : $newBonuzId), $pm, $this->giver);
+                    $recievers = $pm->users;
+                    if ($this->isComment()) {
+                        $recievers = Users::find([
+                            'conditions' => 'id IN (' . implode(",", $recieverIds) . ')'
+                        ]);
+                    }
+                    $this->discord->send($_ENV['APP_URL'] . '/bonuz/' . ($this->isComment() ? $topId : $newBonuzId), $pm, $this->giver, $recievers);
 
                     return "200";
                 } else {
