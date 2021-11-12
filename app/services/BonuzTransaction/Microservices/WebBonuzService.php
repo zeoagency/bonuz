@@ -60,7 +60,7 @@ class WebBonuzService extends BonuzTransactionService
                 $this->throwDatabaseError($bonuz);
             }
         } else {
-            $bonuzDetails = !$this->isComment() ? $pm->users : BonuzDetails::find(array("bonuz_id = $this->parentBonuzId AND to != {$this->giver->id}", "group" => "to"));
+            $bonuzDetails = !$this->isComment() ? $pm->users : BonuzDetails::find(array("bonuz_id = $this->parentBonuzId AND to != {$this->giver->id}"));
             $usersCount = count($bonuzDetails);
             $monthly_limit = $this->giver->monthly_limit;
             $spentBonuz = $this->sql_helper->spentBonus($this->giver->id);
