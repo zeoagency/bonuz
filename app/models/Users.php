@@ -70,6 +70,16 @@ class Users extends \Phalcon\Mvc\Model
      * @Column(type="string", length=255, nullable=true)
      */
     public $discord_id;
+    /**
+     *
+     * @var string
+     */
+    public $birthday;
+    /**
+     *
+     * @var string
+     */
+    public $last_birthday_bonus;
 
     /**
      * Validations and business logic

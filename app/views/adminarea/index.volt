@@ -68,8 +68,16 @@
                                                         value="{{ options.welcome_bonus }}">
                                                     <span class="material-input"></span></div>
                                             </div>
+                                            <div class="px-0 py-0 col-sm-12"></div>
+                                            <label class="col-sm-2 label-on-left col-sm-offset-1">birthday bonus</label>
+                                            <div class="col-sm-2">
+                                                <div class="form-group label-floating is-empty">
+                                                    <input type="text" name="birthday_bonus" class="form-control"
+                                                        value="{{ options.birthday_bonus }}">
+                                                    <span class="material-input"></span></div>
+                                            </div>
 
-                                            <div class="col-sm-2 col-sm-offset-1">
+                                            <div class="col-sm-12">
                                                 <button id="optionsButton" class="btn btn-success">update</button>
                                             </div>
 

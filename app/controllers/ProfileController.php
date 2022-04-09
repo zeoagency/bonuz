@@ -1,7 +1,10 @@
 <?php
 
+use Helpers\BirthdayBonuz;
 use Phalcon\Http\Request;
 use Phalcon\Paginator\Adapter\Model as PaginatorModel;
+use Phalcon\Validation;
+use Phalcon\Validation\Validator\Date;
 
 class ProfileController extends \Phalcon\Mvc\Controller
 {
@@ -35,7 +38,6 @@ class ProfileController extends \Phalcon\Mvc\Controller
 		}
 
 		$user = Users::findFirst($profileId);
-
 		if (!$user) {
 			return $this->response->redirect('');
 		} else {
@@ -111,6 +113,19 @@ class ProfileController extends \Phalcon\Mvc\Controller
 		$user = Users::findFirst($this->userId);
 		$user->name = $this->request->getPost('name');
 		$user->surname = $this->request->getPost('surname');
+		$birthday = $this->request->getPost('birthday');
+		if($birthday) {
+			$validation = new Validation();
+			$validation->add('birthday',new Date([ "format" => "d-m-Y", "message" => "The birthday date is invalid.Please use d-m-Y format.", ]));
+			$messages = $validation->validate(['birthday' => $birthday]);
+		
+			if(count($messages)) {
+				echo $messages[0];
+				return;
+			}
+			
+			$user->birthday = date('Y-m-d H:i:s',strtotime($birthday));
+		}
 
 		$password = $this->request->getPost('password');
 		$passwordUpdate = $this->request->getPost('passwordUpdate');
@@ -121,6 +136,6 @@ class ProfileController extends \Phalcon\Mvc\Controller
 		}
 
 		$user->save();
-		echo "profile succesfully updated";
+		echo "ok";
 	}
 }

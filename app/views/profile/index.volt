@@ -60,6 +60,15 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">birthday(d-m-Y)</label>
+                                    <input type="text" name="birthday" class="form-control">
+                                </div>
+                            </div>
+                           
+                        </div>
 
                         <div class="row">
                             <div class="col-md-10 col-md-offset-1">

@@ -25,10 +25,14 @@ class Options extends \Phalcon\Mvc\Model
     public $welcome_bonus;
 
     /**
-     * Method to set the value of field id
      *
-     * @param integer $id
-     * @return $this
+     * @var string
+     */
+    public $birthday_bonus;
+
+    /**
+     *
+     * @var string
      */
     public function setId($id)
     {

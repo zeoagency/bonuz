@@ -37,6 +37,7 @@ class AdminAreaController extends ControllerBase
 			$options = new Options();
 			$options->monthly_limit = 70;
 			$options->welcome_bonus = 5;
+			$options->birthday_bonus = 70;
 			$options->save();
 
 		}
@@ -82,7 +83,9 @@ class AdminAreaController extends ControllerBase
 				 */
 				$options = Options::findFirst(); // get options
 				$options->welcome_bonus = $this->request->getPost("welcome_bonus");
+				$options->birthday_bonus = $this->request->getPost("birthday_bonus");
 				$this->db->query("UPDATE `users` SET `monthly_limit` = '$ml' where `monthly_limit` = '{$options->monthly_limit}'");
+
 				$options->monthly_limit = $ml;
 				$options->save();
 				echo "options updated";
