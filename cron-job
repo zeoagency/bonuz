@@ -1,0 +1,3 @@
+SHELL=/bin/bash
+BASH_ENV=/etc/profile.d/environmnets.sh 
+*/30 * * * * /usr/local/bin/php -t /var/www/html -f /var/www/html/app/cli.php birthday-bonuz >> /var/log/cron.log 2>&1

@@ -35,6 +35,8 @@ class BirthdayBonuz
 				$bd->quantity = $options->birthday_bonus;
 				$bd->comment = 0;
 				$bd->save();
+                $user->last_birthday_bonus = date('Y-m-d',time());
+                $user->save();
                 $mp = new MessageParser($message);
                 $pm = $mp->parse();
 				$discord->send($_ENV['APP_URL'] . '/bonuz/' . $bonuz->id, $pm, $bot, [$user]);

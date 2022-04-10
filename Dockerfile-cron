@@ -1,0 +1,42 @@
+FROM php:7.3.32-apache
+ARG USER_ID=1000
+ARG GROUP_ID=1000
+ARG TIMEZONE=Europe/Istanbul
+WORKDIR /var/www/html
+RUN a2enmod rewrite
+
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+COPY . /var/www/html
+
+RUN apt update
+RUN apt install wget unzip zip libzip-dev git tzdata cron rsyslog -y
+RUN ln -fs /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
+WORKDIR /tmp
+RUN git clone --branch 3.4.x https://github.com/phalcon/cphalcon.git --depth=1
+WORKDIR /tmp/cphalcon/build
+RUN ./install
+
+RUN pecl install zip \
+  && docker-php-ext-enable zip phalcon
+RUN docker-php-ext-install pdo_mysql
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+WORKDIR /var/www/html
+
+COPY cron-job /etc/cron.d/cron-job
+RUN chmod 0644 /etc/cron.d/cron-job &&\
+    crontab /etc/cron.d/cron-job
+RUN touch /var/log/cron.log
+
+RUN composer i --no-interaction 
+RUN usermod -u $USER_ID www-data
+RUN groupmod -g $GROUP_ID www-data
+COPY cron-entrypoint.sh /root/cron-entrypoint.sh
+RUN chmod 0755 /root/cron-entrypoint.sh
+ENTRYPOINT [ "/bin/bash", "/root/cron-entrypoint.sh" ]
+
+
+

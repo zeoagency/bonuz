@@ -1,4 +1,23 @@
-version: "3"
+version: "3.4"
+x-app-variables: &app-variables
+    APP_URL: "http://localhost"
+    DEBUG: 0
+    DATABASE_ADAPTER: "Mysql"
+    DATABASE_HOST: "mysql"
+    DATABASE_USERNAME: "bonuz"
+    DATABASE_PASSWORD: "bonuz"
+    DATABASE_DBNAME: "bonuz"
+    MAIL_FROM_NAME: "bonuz @zeolabs"
+    MAIL_FROM_EMAIL: "example@gmail.com"
+    MAIL_SERVER: "smtp.example.com"
+    MAIL_PORT: "465"
+    MAIL_SECURITY: "ssl"
+    MAIL_USERNAME: "example@gmail.com"
+    MAIL_PASSWORD: mailpassword
+    MAIL_DISABLED: 1
+    DISCORD_DISABLED: 1
+    DISCORD_SECRET: "64aaba56c4c104594f50d3932780462929b77ceb"
+    DISCORD_WEBHOOK: "https://discord.com/api/webhooks/..."
 services:
   app:
     build: 
@@ -8,31 +27,20 @@ services:
         GROUP_ID: 1000 # Set this to the group id of the user that runs docker-compose
     networks:
       - app
-    environment:
-      APP_URL: "https://example.com"
-      DEBUG: 0
-      DATABASE_ADAPTER: "Mysql"
-      DATABASE_HOST: "mysql"
-      DATABASE_USERNAME: "bonuz"
-      DATABASE_PASSWORD: "bonuz"
-      DATABASE_DBNAME: "bonuz"
-      MAIL_FROM_NAME: "bonuz @zeolabs"
-      MAIL_FROM_EMAIL: "example@gmail.com"
-      MAIL_SERVER: "smtp.example.com"
-      MAIL_PORT: "465"
-      MAIL_SECURITY: "ssl"
-      MAIL_USERNAME: "example@gmail.com"
-      MAIL_PASSWORD: mailpassword
-      MAIL_DISABLED: 1
-      DISCORD_DISABLED: 1
-      DISCORD_SECRET: "64aaba56c4c104594f50d3932780462929b77ceb"
-      DISCORD_WEBHOOK: "https://discord.com/api/webhooks/..."
-      SLACK_DISABLED: 1
-    volumes:
-      - ./cache:/var/www/html/cache
+    environment: *app-variables
     ports:
       - 80:80
       - 443:443
+  app-cron:
+      build: 
+        dockerfile: 'Dockerfile-cron'
+        context: .
+        args:
+          USER_ID: 1000 # Set this to the user id of the user that runs docker-compose
+          GROUP_ID: 1000 # Set this to the group id of the user that runs docker-compose
+      networks:
+        - app
+      environment: *app-variables
 
   mysql:
     depends_on:
@@ -53,4 +61,3 @@ volumes:
 
 networks:
   app:
-

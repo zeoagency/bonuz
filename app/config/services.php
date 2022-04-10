@@ -111,6 +111,21 @@ $di->setShared('view', function () {
                     return "\\Helpers\\Comment::beautify({$key})";
                 }
             );
+            $compiler->addFunction( // convert comment to ui pattern
+                "strtotime",
+                function ($key) {
+                    return "strtotime({$key})";
+                }
+            );
+            $compiler->addFunction(
+                "date",
+                function ($resolvedArgs, $exprArgs) use ($compiler) {
+                    // Resolve the first argument
+                    $firstArgument = $compiler->expression($exprArgs[0]['expr']);
+                    $secondArgument = $compiler->expression($exprArgs[1]['expr']);;
+                    return "date(" . $firstArgument . ", " . $secondArgument . ")";
+                }
+            );
 
             return $volt;
         },
