@@ -64,7 +64,7 @@
                             <div class="col-md-6">
                                 <div class="form-group label-floating">
                                     <label class="control-label">birthday(d-m-Y)</label>
-                                    <input type="text" name="birthday" class="form-control" value="{{ date('d-m-Y',strtotime( user.birthday)) }}">
+                                    <input type="text" name="birthday" class="form-control" value="{{user.birthday ? date('d-m-Y',strtotime( user.birthday)) : '' }}">
                                 </div>
                             </div>
                            
