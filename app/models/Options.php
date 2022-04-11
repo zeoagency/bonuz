@@ -26,9 +26,15 @@ class Options extends \Phalcon\Mvc\Model
 
     /**
      *
-     * @var string
+     * @var integer
      */
     public $birthday_bonus;
+
+    /**
+     *
+     * @var string
+     */
+    public $birthday_bonus_text;
 
     /**
      *
@@ -137,5 +143,4 @@ class Options extends \Phalcon\Mvc\Model
     {
         return 'options';
     }
-
 }

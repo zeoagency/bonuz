@@ -24,7 +24,7 @@ class FindBonuzBot
             $bot->name = 'Bonuz Bot';
             $bot->status = 0;
             $bot->email = 'bonuzbot@bonuz.com';
-            $bot->monthly_limit = 9999;
+            $bot->monthly_limit = 99999;
             $bot->is_admin = 1;
             $bot->password = 'xd';
             if ($bot->create()) {

@@ -21,25 +21,26 @@ class BirthdayBonuz
     {
         $bot = FindBonuzBot::find($auth);
         if($bot && $user) {
-           
             $options = Options::findFirst(); // get options
-                $message = "Happy birthday @" . EmailParser::getMentionName($user->email) . " +$options->birthday_bonus !";
-				$bonuz = new Bonuz();
-				$bonuz->from = $bot->id;
-				$bonuz->comment = $message;
-				$bonuz->quantity = $options->birthday_bonus;
-				$bonuz->save();
-				$bd = new BonuzDetails();
-				$bd->bonuz_id = $bonuz->id;
-				$bd->to = $user->id;
-				$bd->quantity = $options->birthday_bonus;
-				$bd->comment = 0;
-				$bd->save();
-                $user->last_birthday_bonus = date('Y-m-d',time());
-                $user->save();
-                $mp = new MessageParser($message);
-                $pm = $mp->parse();
-				$discord->send($_ENV['APP_URL'] . '/bonuz/' . $bonuz->id, $pm, $bot, [$user]);
+            $message =  empty($options->birthday_bonus_text) ? "Happy birthday <mentionName> <amount> !" : $options->birthday_bonus_text;
+            $message = str_replace('<mentionName>','@'.EmailParser::getMentionName($user->email),$message);
+            $message = str_replace('<amount>','+'.$options->birthday_bonus,$message);
+            $bonuz = new Bonuz();
+            $bonuz->from = $bot->id;
+            $bonuz->comment = $message;
+            $bonuz->quantity = $options->birthday_bonus;
+            $bonuz->save();
+            $bd = new BonuzDetails();
+            $bd->bonuz_id = $bonuz->id;
+            $bd->to = $user->id;
+            $bd->quantity = $options->birthday_bonus;
+            $bd->comment = 0;
+            $bd->save();
+            $user->last_birthday_bonus = date('Y-m-d',time());
+            $user->save();
+            $mp = new MessageParser($message);
+            $pm = $mp->parse();
+            $discord->send($_ENV['APP_URL'] . '/bonuz/' . $bonuz->id, $pm, $bot, [$user]);
         }
 
         
