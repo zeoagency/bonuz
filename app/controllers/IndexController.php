@@ -30,7 +30,7 @@ class IndexController extends ControllerBase
         $this->view->topReceivers = $this->sql_helper->getTopReceivers(); // top receivers list
         $this->view->topGenerous = $this->sql_helper->getTopGenerous(); // top generous list
 
-        $users = Users::find(); // list users
+        $users = Users::find("status = 1"); // list users
         $hashtags = Hashtags::find("active = 1"); // list hashtags
         $autoComplete = "";
         $commentAutoComplete = "";
