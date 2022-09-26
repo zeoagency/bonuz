@@ -13,7 +13,7 @@ class BirthdayBonuzTask extends Task
 		$month = $dateTime->format('m');
 		$day= $dateTime->format('d');
 		$this->say("month: $month, day: $day");
-		$users = Users::find(["birthday IS NOT NULL AND DATE_FORMAT(birthday, '%m-%d') ='$month-$day' AND (last_birthday_bonus IS NULL OR DATE_FORMAT(NOW(), '%Y') <> DATE_FORMAT(last_birthday_bonus, '%Y'))"]);
+		$users = Users::find(["birthday IS NOT NULL AND DATE_FORMAT(birthday, '%m-%d') ='$month-$day' AND (last_birthday_bonus IS NULL OR DATE_FORMAT(NOW(), '%Y') <> DATE_FORMAT(last_birthday_bonus, '%Y')) AND status = 1"]);
 		
 		$this->say("Current date: $date");
         $this->say('Checking users:'.$users->count());
